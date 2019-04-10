@@ -28,7 +28,8 @@ stuffTime = [x-stuffTime[0] for x in stuffTime]
 print(sys.argv)
 path = sys.argv[0]
 
-file = open("oit.txt","w")
+file = open("pythondata.txt","w")
+file.write('PYTHON\n')
 [file.write(x + ',') for x in stuff]
 file.write('\n')
 [file.write(str(x) + ',') for x in stuffTime]

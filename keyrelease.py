@@ -7,14 +7,23 @@ import time
 
 print("press 'escape' to quit...")
 
-file = open("unitydata.txt","r")
+file = open("pythondata.txt","r")
 headertype = file.readline()
 data1 = file.readline().split(',')[0:-1]
 data2 = file.readline().split(',')[0:-1]
 data3 = file.readline().split(',')[0:-1]
 
-def pythonread(key: str = '', timeOfAction: float = 0.0, action: bool = False):
-    pass
+def pythonread(key: str = '', timeOfAction: float = 0.0):
+
+    time.sleep(3)
+
+    timeNow = time.time()
+
+    for k,t in zip(key,timeOfAction):
+        gui.keyDown(k, _pause=False)
+        while time.time() < timeNow + t:
+            pass
+        gui.keyUp(k, _pause=False)
 
 def unityread(key: str = '', timeOfAction: float = 0.0, action: bool = False):
     timeStart = time.time()
@@ -34,34 +43,13 @@ def unityread(key: str = '', timeOfAction: float = 0.0, action: bool = False):
         else:
             gui.keyUp(k, _pause=False)
 
-
+#call corresponsing functions depending on file header
 if "UNITY" in headertype:
     unityread(data1, [float(x) for x in data2], [1 if b in "True" else 0 for b in data3])
-    #unity interpret
-    pass
+
 elif "PYTHON" in headertype:
-    #python interpret
-    pass
+    pythonread(data1, [float(x) for x in data2])
+
 else:
     print("Header not supported")
-
-
-
-
-# keys = file.readline().split(',')[0:-1]
-# b = file.readline().split(',')[0:-1]
-# keyTime = [float(x) for x in b]
-
-# file.close()
-# del(file)
-
-# time.sleep(3)
-
-# timeNow = time.time()
-
-# for k,t in zip(keys,keyTime):
-#     gui.keyDown(k, _pause=False)
-#     while time.time() < timeNow + t:
-#         pass
-#     gui.keyUp(k, _pause=False)
 
