@@ -1,0 +1,4 @@
+UNITY
+t,t,h,h,i,i,s,s,h,h,e,r,e,e,r,e,i,i,s,s,a,a,t,e,t,e,s,t,s,t,
+0.7700198,0.8696765,1.051652,1.151053,1.167792,1.283589,1.300162,1.41643,1.681264,1.747453,1.813719,1.913119,1.9465,2.012519,2.012519,2.062219,2.211441,2.29549,2.310719,2.41012,2.526086,2.608919,3.006541,3.106224,3.106224,3.221886,3.304719,3.387975,3.404598,3.470387,
+True,False,True,False,True,False,True,False,True,False,True,True,False,True,False,False,True,False,True,False,True,False,True,True,False,False,True,True,False,False,
