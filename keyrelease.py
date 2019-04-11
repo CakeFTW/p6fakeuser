@@ -7,34 +7,32 @@ import time
 
 print("press 'escape' to quit...")
 
-file = open("pythondata.txt","r")
+file = open("unitydata.txt","r")
 headertype = file.readline()
 data1 = file.readline().split(',')[0:-1]
 data2 = file.readline().split(',')[0:-1]
 data3 = file.readline().split(',')[0:-1]
 
-def pythonread(key: str = '', timeOfAction: float = 0.0):
-
+def pythonread(key: str = '', timeOfAction: float = 0.0, delay = 0):
+    "inputs keys captured from python, format is - keys, time since begining, delay until starting to play"
     time.sleep(3)
 
     timeNow = time.time()
 
     for k,t in zip(key,timeOfAction):
         gui.keyDown(k, _pause=False)
-        while time.time() < timeNow + t:
+        while time.time() < timeNow + t + delay:
             pass
         gui.keyUp(k, _pause=False)
 
-def unityread(key: str = '', timeOfAction: float = 0.0, action: bool = False):
+def unityread(key: str = '', timeOfAction: float = 0.0, action: bool = False, delay = 0.0):
+    "inputs keys captured from unity, format is - keys, time since begining, up or down, delay until starting to play"
     timeStart = time.time()
-
-    print(action)
-
 
     for k,t,a in zip(key,timeOfAction,action):
     
         #wait until time stamp
-        while time.time() < timeStart + t:
+        while time.time() < timeStart + t+delay:
             pass
         
         #perform the correct action
@@ -52,4 +50,3 @@ elif "PYTHON" in headertype:
 
 else:
     print("Header not supported")
-

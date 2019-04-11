@@ -33,3 +33,5 @@ file.write('PYTHON\n')
 [file.write(x + ',') for x in stuff]
 file.write('\n')
 [file.write(str(x) + ',') for x in stuffTime]
+
+
