@@ -49,7 +49,8 @@ Dictionary<KeyCode, char> keycodeToChar = new Dictionary<KeyCode,char>()
 {KeyCode.W,'w'}, 
 {KeyCode.X,'x'}, 
 {KeyCode.Y,'y'}, 
-{KeyCode.Z,'z'} 
+{KeyCode.Z,'z'}, 
+{KeyCode.Escape, ' '}
 
 };
 
@@ -59,23 +60,15 @@ Dictionary<KeyCode, char> keycodeToChar = new Dictionary<KeyCode,char>()
     void Start()
     {
         startTime = Time.time;
+        //QualitySettings.vSyncCount = 1;
     }
 
     // Update is called once per frame
     void Update()
     {
+        float now = Time.time;
         char temp = '_';
-        foreach(KeyCode vKey in System.Enum.GetValues(typeof(KeyCode))){
-            if(Input.GetKeyDown(vKey)){
-                if(keycodeToChar.TryGetValue(vKey, out temp)){
-                    keys.Add(new keyStamp(Time.time - startTime, temp, true));
-                }
-            }
-            if(Input.GetKeyUp(vKey)){
-                if(keycodeToChar.TryGetValue(vKey, out temp)){
-                    keys.Add(new keyStamp(Time.time - startTime, temp, false));
-                }
-            }
+        foreach(KeyCode vKey in keycodeToChar.Keys){
             if(Input.GetKeyDown(vKey) && vKey == KeyCode.Escape){
                 Debug.Log("saved keyinput to file at path =" + filePath);
                 StreamWriter writer = new StreamWriter(filePath + "\\unitydata.txt", true);
@@ -83,18 +76,30 @@ Dictionary<KeyCode, char> keycodeToChar = new Dictionary<KeyCode,char>()
                 string a = "";
                 string t = "";
                 string k = "";
-                
+                float adjustedStamp;//skew all time stamps to original time
                 foreach (keyStamp n in keys)
                 {
                     k += n._key + ",";
-                    t += n._timeStamp.ToString() + ",";
+                    adjustedStamp = n._timeStamp - keys[0]._timeStamp;
+                    t += adjustedStamp.ToString() + ",";
                     a += n._action.ToString() + ",";
                 }
                 writer.WriteLine(k);
                 writer.WriteLine(t);
                 writer.WriteLine(a);
                 writer.Close();
-            };
+            }
+            
+            if(Input.GetKeyDown(vKey)){
+                if(keycodeToChar.TryGetValue(vKey, out temp)){
+                    keys.Add(new keyStamp(now - startTime, temp, true));
+                }
+            }
+            if(Input.GetKeyUp(vKey)){
+                if(keycodeToChar.TryGetValue(vKey, out temp)){
+                    keys.Add(new keyStamp(now - startTime, temp, false));
+                }
+            }
         }
     }
 }
