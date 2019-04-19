@@ -4,6 +4,7 @@ import sys
 import pyautogui as gui
 import time
 import keyboard as kb
+from numpy import std
 
 print("okay, sending input")
 
@@ -42,26 +43,26 @@ def unityread(key: str = '', timeOfAction: float = 0.0, action: bool = False, de
         else:
             gui.keyUp(k, _pause=False)
 
-
 def keyboard_read(key: int = 0, timeOfAction: float = 0.0, action: bool = False, delay = 0.0):
     "inputs keys captured from keyboard, format is - keys, time since begining, up or down, delay until starting to play"
+    time.sleep(delay)
 
+
+    time_dif = []
     state = kb.stash_state()
     a = kb.start_recording()
     kb.stop_recording()
     timeStart = time.time()
     last_time = None
     for k,t,a in zip(key,timeOfAction,action):
-        print(float(float(timeStart+ t)-time.time()))
-        timeToSleep = (float(timeStart+ t)-time.time())
-        if(timeToSleep > 0):
-            time.sleep(timeToSleep)
+        sleep_until = float(timeStart+ t)
+        while time.time() < sleep_until:
+            pass
         kb.press(k) if a == True else kb.release(k)
+        time_dif.append(time.time() - float(timeStart+ t))
 
     kb.restore_modifiers(state)
-    print("done")
-
-
+    return time_dif
 
 #call corresponsing functions depending on file header
 if "UNITY" in headertype:
@@ -71,7 +72,13 @@ elif "PYTHON" in headertype:
     pythonread(data1, [float(x) for x in data2])
 
 elif "KEYBOARD" in headertype:
-    keyboard_read([int(x) for x in data1], [float(x) for x in data2], [1 if b in "1" else 0 for b in data3],3.0)
+    totals = []
+    for i in range(1):
+        totals.append(keyboard_read([int(x) for x in data1], [float(x) for x in data2], [1 if b in "1" else 0 for b in data3],0))
+
+    means = [std([col[i] for col in totals])/len(totals) for i in range(len(totals[0]))]
+
+    print(means)
 
 else:
     print("Header not supported")
