@@ -8,7 +8,7 @@ from numpy import std
 
 print("okay, sending input")
 
-file = open("keyboard.txt","r")
+file = open("keyboard1.txt","r")
 headertype = file.readline()
 data1 = file.readline().split(',')[0:-1]
 data2 = file.readline().split(',')[0:-1]

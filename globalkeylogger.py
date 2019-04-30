@@ -4,7 +4,7 @@ import _thread
 import time
 
 
-def record_webcam():
+def record_webcam(flag):
     print("Opening webcam")
 
     cap = cv2.VideoCapture(0)
@@ -14,7 +14,9 @@ def record_webcam():
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     out = cv2.VideoWriter('output.avi',fourcc, fps, (int(width),int(height)))
-
+    print(flag)
+    flag.append(True)
+    print(flag)
     while(cap.isOpened()):
         ret, frame = cap.read()
         if ret==True:
@@ -51,8 +53,6 @@ def record_keyboard():
         times.append(e.time)
         up_down.append(e.event_type)
 
-
-
     #set times to be relative to starting time
     times = [x - startTime for x in times]
     print(times)
@@ -69,7 +69,12 @@ def record_keyboard():
 
 
 print("starting program")
-web_thread = _thread.start_new_thread(record_webcam, ())
+webcam_recording = []
+web_thread = _thread.start_new_thread(record_webcam, (webcam_recording,))
+while webcam_recording == []:
+    pass
+
+print("got okay to start recording")
 record_keyboard()
 
 print("done recording")
