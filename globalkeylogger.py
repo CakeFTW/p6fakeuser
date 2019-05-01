@@ -67,7 +67,7 @@ def record_keyboard(path_to_save):
 
 print("starting program")
 vid_path, key_path = "",""
-if( len(sys.argv) > 2):
+if( len(sys.argv) > 1):
     print("participant number: " ,sys.argv[1])
     key_path = "data_key/participant" + str(sys.argv[1]) + ".txt"
     vid_path = "data_vid/participant" + str(sys.argv[1]) + ".avi"
