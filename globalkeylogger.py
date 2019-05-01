@@ -2,9 +2,10 @@ import keyboard
 import cv2
 import _thread
 import time
+import sys
 
 
-def record_webcam(flag):
+def record_webcam(flag, path_to_save):
     print("Opening webcam")
 
     cap = cv2.VideoCapture(0)
@@ -13,17 +14,14 @@ def record_webcam(flag):
     height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    out = cv2.VideoWriter('output.avi',fourcc, fps, (int(width),int(height)))
+    out = cv2.VideoWriter(path_to_save,fourcc, fps, (int(width),int(height)))
     print(flag)
     flag.append(True)
     print(flag)
     while(cap.isOpened()):
         ret, frame = cap.read()
         if ret==True:
-
-            # write the flipped frame
             out.write(frame)
-
             cv2.imshow('frame',frame)
             if cv2.waitKey(2) & 0xFF == ord('\x1b'):
                 print("video: got escape char")
@@ -37,7 +35,7 @@ def record_webcam(flag):
     cv2.destroyAllWindows()
 
 
-def record_keyboard():
+def record_keyboard(path_to_save):
     print("starting recording")
     startTime = time.time()
     record = keyboard.record()
@@ -58,7 +56,7 @@ def record_keyboard():
     print(keys)
 
 
-    file = open("keyboard1.txt","a")
+    file = open(path_to_save,"a")
     file.write('KEYBOARD\n')
     [file.write(str(x) + ',') for x in keys]
     file.write('\n')
@@ -68,11 +66,21 @@ def record_keyboard():
 
 
 print("starting program")
+vid_path, key_path = "",""
+if( len(sys.argv) > 2):
+    print("participant number: " ,sys.argv[1])
+    key_path = "data_key/participant" + str(sys.argv[1]) + ".txt"
+    vid_path = "data_vid/participant" + str(sys.argv[1]) + ".avi"
+else:
+    print("participant number: none")
+    key_path = "data_key/participant_nothing.txt"
+    vid_path = "data_vid/participant_nothing.avi"
+
 webcam_recording = []
-web_thread = _thread.start_new_thread(record_webcam, (webcam_recording,))
+web_thread = _thread.start_new_thread(record_webcam, (webcam_recording,vid_path,))
 while webcam_recording == []:
     pass
-record_keyboard()
+record_keyboard(key_path)
 
 print("done recording")
 
