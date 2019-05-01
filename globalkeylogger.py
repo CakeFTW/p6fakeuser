@@ -8,9 +8,9 @@ def record_webcam(flag):
     print("Opening webcam")
 
     cap = cv2.VideoCapture(0)
-    fps = cap.get(cv2.cv2.CAP_PROP_FPS)
-    width = cap.get(cv2.cv2.CAP_PROP_FRAME_WIDTH)
-    height = cap.get(cv2.cv2.CAP_PROP_FRAME_HEIGHT)
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+    height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     out = cv2.VideoWriter('output.avi',fourcc, fps, (int(width),int(height)))
@@ -45,9 +45,8 @@ def record_keyboard():
     #get rid of escape input
     record.pop()
 
-    keys = []
-    times = []
-    up_down = []
+    keys, times, up_down = [],[],[]
+
     for e in record:
         keys.append(e.scan_code)
         times.append(e.time)
@@ -59,7 +58,7 @@ def record_keyboard():
     print(keys)
 
 
-    file = open("keyboard1.txt","w")
+    file = open("keyboard1.txt","a")
     file.write('KEYBOARD\n')
     [file.write(str(x) + ',') for x in keys]
     file.write('\n')
@@ -73,8 +72,6 @@ webcam_recording = []
 web_thread = _thread.start_new_thread(record_webcam, (webcam_recording,))
 while webcam_recording == []:
     pass
-
-print("got okay to start recording")
 record_keyboard()
 
 print("done recording")
