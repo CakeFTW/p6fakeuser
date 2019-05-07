@@ -15,12 +15,12 @@ def record_webcam(flag, path_to_save):
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     out = cv2.VideoWriter(path_to_save,fourcc, fps, (int(width),int(height)))
-    print(flag)
-    flag.append(True)
-    print(flag)
+
     while(cap.isOpened()):
         ret, frame = cap.read()
         if ret==True:
+            if flag == []:
+                flag.append(True)
             out.write(frame)
             cv2.imshow('frame',frame)
             if cv2.waitKey(2) & 0xFF == ord('\x1b'):
@@ -40,8 +40,6 @@ def record_keyboard(path_to_save):
     startTime = time.time()
     record = keyboard.record()
 
-    #get rid of escape input
-    record.pop()
 
     keys, times, up_down = [],[],[]
 
@@ -62,7 +60,7 @@ def record_keyboard(path_to_save):
     file.write('\n')
     [file.write(str(x) + ',') for x in times]
     file.write('\n')
-    [file.write(str(1)+',' if x in 'down' else str(0) + ',') for x in up_down ]
+    [file.write(str(1)+',' if x in 'down' else str(0) + ',') for x in up_down]
 
 
 print("starting program")

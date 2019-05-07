@@ -1,4 +1,3 @@
-
 #imports
 import sys
 import pyautogui as gui
@@ -8,7 +7,7 @@ from numpy import std
 
 print("okay, sending input")
 
-file = open("keyboard1.txt","r")
+file = open("preflight.txt","r")
 headertype = file.readline()
 data1 = file.readline().split(',')[0:-1]
 data2 = file.readline().split(',')[0:-1]
@@ -47,11 +46,8 @@ def keyboard_read(key: int = 0, timeOfAction: float = 0.0, action: bool = False,
     "inputs keys captured from keyboard, format is - keys, time since begining, up or down, delay until starting to play"
     time.sleep(delay)
 
-
     time_dif = []
-    state = kb.stash_state()
-    a = kb.start_recording()
-    kb.stop_recording()
+    kb._listener.start_if_necessary()
     timeStart = time.time()
     last_time = None
     for k,t,a in zip(key,timeOfAction,action):
@@ -60,8 +56,6 @@ def keyboard_read(key: int = 0, timeOfAction: float = 0.0, action: bool = False,
             pass
         kb.press(k) if a == True else kb.release(k)
         time_dif.append(time.time() - float(timeStart+ t))
-
-    kb.restore_modifiers(state)
     return time_dif
 
 #call corresponsing functions depending on file header
@@ -73,13 +67,14 @@ elif "PYTHON" in headertype:
 
 elif "KEYBOARD" in headertype:
     totals = []
-    for i in range(1):
+    for i in range(10):
         totals.append(keyboard_read([int(x) for x in data1], [float(x) for x in data2], [1 if b in "1" else 0 for b in data3],0))
 
-    means = [std([col[i] for col in totals])/len(totals) for i in range(len(totals[0]))]
-
+    means = [std([col[i] for col in totals]) for i in range(len(totals[0]))]
+    total_difference = sum(means)/len(means)
     print(means)
+    print(total_difference)
+    print(totals)
 
 else:
     print("Header not supported")
-
