@@ -22,6 +22,7 @@ try:
 except:
     print("participant already exist, renaming to paricipant_allready_exist")
     os.mkdir(folder_path + "/participant_already_exists")
+    file_name = "participant_already_exists"
 
 total_path = folder_path + "/" +file_name
 print(" started recording for", file_name)
