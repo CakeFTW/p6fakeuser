@@ -1,10 +1,13 @@
 import os
 import keyboard as kb
 import cv2
-from time import time
+from time import time,sleep
 from sys import argv as arg
 
 recording_delay = 0.08
+
+
+
 
 try:
     file_name = "participant"+ str(arg[1])
@@ -49,8 +52,7 @@ def save_frame (label, file_name, out_folder):
 
 while True:
     time_to_check_key = time() + recording_delay
-    while time() < time_to_check_key:
-        pass
+    sleep(time_to_check_key - time)
     key = kb.read_event()
     n=n+1
     print(key.scan_code)
