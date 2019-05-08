@@ -1,7 +1,7 @@
 import os
 import keyboard as kb
 import cv2
-from time import time
+from time import time, sleep
 from sys import argv as arg
 import _thread
 
@@ -12,55 +12,53 @@ try:
 except:
     print("no file")
     exit()
-folder_path = "recordings"
-try:
-    os.mkdir(folder_path)
-except:
-    pass
 
-try:
-    os.mkdir(folder_path + "/" + file_name)
-except:
-    print("participant already exist, renaming to paricipant_allready_exist")
-    os.mkdir(folder_path + "/participant_already_exists")
-    file_name = "participant_already_exists"
 
-total_path = folder_path + "/" +file_name
-print(" started recording for", file_name)
 
 time_to_check_key = 0
 kb.start_recording
 last_frame = 0
-frame = 0
+
 cap = cv2.VideoCapture(file_name)
+
 file_name=file_name[:-4]
+cv2.waitKey(500)
 fps = cap.get(cv2.CAP_PROP_FPS)
-delay = 1000 / fps
+delay = 1000 / 33
 n=0
+
+try:
+    os.mkdir(file_name)
+except:
+    print("participant already exist, renaming to paricipant_allready_exist")
+    exit()
+    
+print(" started recording for", file_name)
 
 keypresses = []
 
 
-def displayFrame ():
-    res, frame = cap.read()
-    cv2.imshow()
-    if keypresses != []:
-        label = keypresses.pop()
-        imageName = file_name+"_"+str(label)+"_"+str(n)+".png"
-        try:
-            os.mkdir(file_name+ "/" + str(label))
-        except:
-            pass
-        cv2.imwrite(file_name + "/" + str(label) + "/" + imageName,frame)
+def display_frame (stack):
+    while (cap.isOpened()):
+        res, frame = cap.read()
+        if res == True:
+            cv2.imshow("poopity scoop",frame)
+            if stack != []:
+                label = stack.pop()
+                imageName = file_name+"_"+str(label)+"_"+str(n)+".png"
+                try:
+                    os.mkdir(file_name+ "/" + str(label))
+                except:
+                    pass
+                cv2.imwrite(file_name + "/" + str(label) + "/" + imageName,frame)
+        cv2.waitKey(30)
 
-    cv2.waitKey(delay)
 
-t1=_thread.start_new_thread(displayFrame,())
+t1=_thread.start_new_thread(display_frame,(keypresses,))
 
 while True:
     time_to_check_key = time() + recording_delay
-    while time() < time_to_check_key:
-        pass
+    sleep(time_to_check_key - time())
     key = kb.read_event()
     n=n+1
     print(key.scan_code)
@@ -68,8 +66,5 @@ while True:
     keypresses.append(key.scan_code)
     print(a - last_frame)
     last_frame = a
-
-
-def record_keyboard(path_to_save):
     pass
 
