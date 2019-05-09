@@ -4,6 +4,7 @@ import cv2
 import keyboard as kb
 from time import time, sleep
 import _thread
+import json
 
 #this is hopefully the final recording script
 
@@ -82,7 +83,7 @@ up_downs = []
 frames = []
 
 kb.start_recording
-recording_delay = 0.8
+recording_delay = 0.08
 
 while number_of_frames == []:
     pass
@@ -104,16 +105,12 @@ while True:
 times = [x - start_time for x in times]
 
 #start writing file
+totals = [header,keys,times,up_downs,frames]
+print(totals)
+file = open(rec_folder+"/"+ sample_name + ".json","a")
+json.dump(totals, file)
+file.close()
 
-file = open(rec_folder+"/"+ sample_name + ".data","a")
-file.write(header+'\n')
-[file.write(str(x) + ',') for x in keys]
-file.write('\n')
-[file.write(str(x) + ',') for x in times]
-file.write('\n')
-[file.write(str(1)+',' if x in 'down' else str(0) + ',') for x in up_downs]
-file.write('\n')
-[file.write(str(x) + ',') for x in frames]
 
 
 
