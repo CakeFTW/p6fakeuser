@@ -33,10 +33,22 @@ for participants in dir_to_check:
 
             dest_path = "{}/{}".format(out_dir,action)
 
-            print('copy {} {}'.format(img_path,dest_path))
-
             shutil.copy(img_path, dest_path)
+
+
 
 
     print("--------- {} of {} processed: {}".format(dir_to_check.index(participants)+1,len(dir_to_check),participants))
 
+print("renaming 36 to 38, and 38 to 36")
+
+name = listdir(out_dir)
+if "36" in name:
+    rename(out_dir + "/" + "36", out_dir + "/" + "tmp")
+if "38" in name:
+     rename(out_dir + "/" + "38", out_dir + "/" + "36")
+name = listdir(out_dir)
+if "tmp" in name:
+    rename(out_dir + "/" + "tmp", out_dir + "/" + "38")
+
+print("it is done my brother!!!")
