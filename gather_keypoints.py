@@ -21,7 +21,10 @@ for path in dirs:
     files = os.listdir()
     for file in files:
         f = open(os.getcwd() + "/"+file, "r")
-        data.append(json.load(f))
+        tmp_store = json.load(f)["people"]
+        if len(tmp_store) != 1:
+            break
+        data.append(tmp_store[0]["pose_keypoints_2d"])
         labels.append(path)
     print("loaded :", path)
 
