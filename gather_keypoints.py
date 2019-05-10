@@ -37,8 +37,8 @@ os.chdir(origin)
 # file_labels = open("dataframe_labels", 'a')
 # json.dump()
 
-out_data.to_csv("dataframe_data.csv")
-out_labels.to_csv("dataframe_labels.csv")
+out_data.to_csv("dataframe_data.csv",index=False)
+out_labels.to_csv("dataframe_labels.csv", index=False)
 
 
 print(out_data.head())
