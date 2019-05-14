@@ -42,16 +42,20 @@ pose_thread = _thread.start_new_thread( start_open_pose , ())
 
 #wait for the folder to be created
 while True:
-    sleep(0.1)
-    if json_dir in listdir():
+    try:
+        sleep(1)
+        chdir(json_dir)
         break
+    except:
+        print("waiting for json folder to be created")
 
+print("found the folder")
 
 while True:
     sleep(0.095)
+    print(listdir())
     for file in listdir():
         if time() - path.getctime(file) > 2:
-            print("deleting:", file)
             remove(file) 
 
 
