@@ -7,7 +7,7 @@ import sys
 
 def record_webcam(flag, path_to_save):
     print("Opening webcam")
-    cap = cv2.VideoCapture('participant391.avi')
+    cap = cv2.VideoCapture('participant31.avi')
     fps = cap.get(cv2.CAP_PROP_FPS)
     width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
     height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
