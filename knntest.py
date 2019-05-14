@@ -42,3 +42,4 @@ print(accuracy_score(y_test,pred))
 print((time()-a)/len(x_train))
 
 pickle.dump(knn, open('knn.sav', 'wb'))
+loaded = pickle.load(open('knn.sav', 'rb'))
