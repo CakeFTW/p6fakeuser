@@ -59,7 +59,7 @@ print("found the folder")
 
 
 while True:
-    sleep(0.095)
+    sleep(0.09)
     print(listdir())
     #delete old files
     newest_file = ""
@@ -90,11 +90,16 @@ while True:
                 arrayz = np.zeros((1,75))
                 arrayz[0] = data
                 data_transformed = dp.circle_scale(arrayz) 
-                class_number = model.predict_classes(data_transformed)
-                if(control):
-                    kb.press_and_release(key_codes[class_number[0]])
-                else:
-                    print(key_codes[class_number[0]])
+                class_number = model.predict(data_transformed)
+                pred_key = np.argmax(class_number)
+                print(class_number[pred_key])
+                if(class_number[pred_key] > 0.5):
+                    if(control):
+                        kb.press(key_codes[class_number[0]])
+                        print(key_codes[class_number[0]])
+                    else:
+                        print(key_codes[class_number[0]])
+                
 
             except Exception as ex:
                 print(ex)
