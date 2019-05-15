@@ -25,8 +25,8 @@ def call_openpose_on_folder(path):
     #pose_flags = r' --display 0 --render_pose 0'
     pose_flags = r""
 
-    print(folders_to_call_on[2:])
-    for folder in folders_to_call_on[2:]:
+
+    for folder in folders_to_call_on:
         pose_media = "--image_dir " + out_dir + "/" + argv[1]+ "/" + folder
         output_dest = "--write_json " + out_dir + "/" + argv[1] + "_poses/" +folder
 

@@ -40,11 +40,14 @@ classifier.add(Dense(1, activation='sigmoid', kernel_initializer='random_normal'
 
 classifier.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-classifier.fit(x_train,y_train, epochs=200, batch_size= 10)
+classifier.fit(x_train,y_train, epochs=2, batch_size= 100)
 
 
 scores = classifier.evaluate(x_train, y_train)
 print("\n%s: %.2f%%" % (classifier.metrics_names[1], scores[1]*100))
 scores = classifier.evaluate(x_test, y_test)
 print("\n%s: %.2f%%" % (classifier.metrics_names[1], scores[1]*100))
+data = x_test
+print(len(classifier.predict_classes(data)))
+classifier.save('nn.h5')
 
