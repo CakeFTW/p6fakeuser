@@ -91,14 +91,15 @@ while True:
                 arrayz[0] = data
                 data_transformed = dp.circle_scale(arrayz) 
                 class_number = model.predict(data_transformed)
-                pred_key = np.argmax(class_number)
-                print(class_number[pred_key])
-                if(class_number[pred_key] > 0.5):
+                pred_key = np.argmax(class_number[0])
+                print(pred_key, "with probability " , class_number[0,pred_key])
+
+                if(class_number[0,pred_key] > 0.5):
                     if(control):
-                        kb.press(key_codes[class_number[0]])
-                        print(key_codes[class_number[0]])
+                        kb.press(key_codes[pred_key])
+                        print(key_codes[pred_key])
                     else:
-                        print(key_codes[class_number[0]])
+                        print(key_codes[pred_key])
                 
 
             except Exception as ex:
