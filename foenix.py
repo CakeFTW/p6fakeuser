@@ -94,7 +94,7 @@ while True:
                 pred_key = np.argmax(class_number[0])
                 print(pred_key, "with probability " , class_number[0,pred_key])
 
-                if(class_number[0,pred_key] > 0.5):
+                if(class_number[0,pred_key] > 0.9):
                     if(control):
                         kb.press(key_codes[pred_key])
                         print(key_codes[pred_key])
