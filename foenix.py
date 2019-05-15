@@ -8,6 +8,7 @@ from time import sleep,time
 import json
 from keras.models import Sequential
 import numpy as np
+import dataprocess as dp
 
 #script for running open pose with the arguments
 #1 path to the model to use
@@ -78,6 +79,7 @@ while True:
     
     data = []
     key_codes = [17,23,31,36,17,38]
+    kb._listener.start_if_necessary()
     try:
         f = open(newest_file, 'r')
         #load newsest file
@@ -87,9 +89,10 @@ while True:
             try:
                 arrayz = np.zeros((1,75))
                 arrayz[0] = data
-                class_number = model.predict_classes(arrayz)
+                data_transformed = dp.circle_scale(arrayz) 
+                class_number = model.predict_classes(data_transformed)
                 if(control):
-                    kb.press(key_codes[class_number[0]])
+                    kb.press_and_release(key_codes[class_number[0]])
                 else:
                     print(key_codes[class_number[0]])
 
