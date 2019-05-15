@@ -36,7 +36,7 @@ x_train,x_test,y_train,y_test = train_test_split(data_set_np,data_labels_np, tes
 print(x_train[1])
 print(x_train[1].shape)
 
-drop_out = 0.1
+drop_out = 0.3
 #create model
 classifier = Sequential()
 #First Hidden Layer
@@ -63,7 +63,7 @@ classifier.add(Dense(6, activation='softmax', kernel_initializer='random_normal'
 
 classifier.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-classifier.fit(x_train,y_train, epochs=200, batch_size= 128, validation_data = (x_test,y_test))
+classifier.fit(x_train,y_train, epochs=1000, batch_size= 124, validation_data = (x_test,y_test))
 
 starttime = time()
 scores = classifier.evaluate(x_train, y_train)
