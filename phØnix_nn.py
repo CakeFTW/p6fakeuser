@@ -15,13 +15,16 @@ import dataprocess as dp
 
 
 print("tensor-boi running")
-data_set = pd.read_csv("calibration_data.csv")
+data_set = pd.read_csv("dataframe_data.csv")
+
 data_set_np = data_set.values
 data_set_np = dp.circle_scale(data_set_np)
 
-data_labels = pd.read_csv("calibration_labels.csv")
-print(data_set.describe())
+data_labels = pd.read_csv("dataframe_labels.csv")
+print("dada")
+print(data_labels['0'].value_counts())
 data_labels['labels'] = data_labels['0'].astype(str)
+
 
 label_one_hot = pd.get_dummies(data_labels['labels'])
 data_labels_np = label_one_hot.values
@@ -40,7 +43,7 @@ drop_out = 0.3
 #create model
 classifier = Sequential()
 #First Hidden Layer
-classifier.add(Dense(128, activation='relu', kernel_initializer='random_normal', input_dim=75))
+classifier.add(Dense(128, activation='relu', kernel_initializer='random_normal', input_dim=data_set_np.shape[1]))
 classifier.add(Dropout(drop_out))
 #Second Hidden Layer
 classifier.add(Dense(64, activation='relu', kernel_initializer='random_normal'))
@@ -71,7 +74,7 @@ print("\n%s: %.2f%%" % (classifier.metrics_names[1], scores[1]*100))
 scores = classifier.evaluate(x_test, y_test)
 print("\n%s: %.2f%%" % (classifier.metrics_names[1], scores[1]*100))
 
-file = open(r"C:\Users\Rasmus\Downloads\openpose-1.4.0-win64-gpu-binaries_recommended\openpose-1.4.0-win64-gpu-binaries\model_test1557825038\000000000177_keypoints.json", 'r')
+file = open(r"C:\Users\Rasmus\Documents\p6MLfoReal\calibration_only_poses\17\participant11_17_100_keypoints.json", 'r')
 import json
 data = json.load(file)['people'][0]['pose_keypoints_2d']
 print(data[1])
@@ -79,6 +82,8 @@ arrayz = np.zeros((1,75))
 
 
 arrayz[0] = data
+arrayz = dp.circle_scale(arrayz)
+
 print(arrayz[0])
 
 

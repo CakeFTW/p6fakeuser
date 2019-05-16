@@ -22,11 +22,11 @@ for path in dirs:
     for file in files:
         f = open(os.getcwd() + "/"+file, "r")
         tmp_store = json.load(f)["people"]
-        if len(tmp_store) != 1:
+        if len(tmp_store) < 1:
             break
         data.append(tmp_store[0]["pose_keypoints_2d"])
         labels.append(path)
-    print("loaded :", path)
+    print("loaded :", path, " where i found ", len(files), "files")
 
 out_data = pandas.DataFrame(data)
 out_labels = pandas.DataFrame(labels)
@@ -41,8 +41,7 @@ out_data.to_csv("dataframe_data.csv",index=False)
 out_labels.to_csv("dataframe_labels.csv", index=False)
 
 
-print(out_data.head())
-print(out_labels.head())
+print(out_labels[0].value_counts())
 print("done in", (time() - start_time), " seconds")
 
 
