@@ -82,7 +82,7 @@ times = []
 up_downs = []
 frames = []
 
-kb.start_recording
+kb._listener.start_if_necessary()
 recording_delay = 0.08
 
 while number_of_frames == []:
