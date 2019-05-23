@@ -17,9 +17,9 @@ def call_openpose_on_folder(path):
     except:
         print("folder already exists")
 
-    chdir(r"C:\Users\Rasmus\Downloads\openpose-1.4.0-win64-gpu-binaries_recommended\openpose-1.4.0-win64-gpu-binaries")
+    chdir(r"D:\Openpose\openpose-master")
 
-    pose_path = r'bin\OpenPoseDemo.exe'
+    pose_path = r'build-old\x64\Release\openposedemo.exe'
     
 
     #pose_flags = r' --display 0 --render_pose 0'

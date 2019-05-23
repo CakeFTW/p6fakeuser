@@ -9,24 +9,22 @@ def circle_scale(data : np.ndarray, joint = 24):
     if data.shape[1] != 75:
         print("wrong dimensions, DUDE! should be 75 MAAAAN")
         exit()
-
-    print(data.shape)
     #remove confidence intervals
 
 
 
     # #scale according to hips
-    # x_index = data[:,joint]
-    # y_indey = data[:,joint + 1]
-    # for i in range(25):
-    #     data[:,i*3] = data[:,i*3] - x_index
-    #     data[:,(i*3)+1] = data[:,(i*3)+1] - y_indey
+    x_index = data[:,joint]
+    y_indey = data[:,joint + 1]
+    for i in range(25):
+        data[:,i*3] = data[:,i*3] - x_index
+        data[:,(i*3)+1] = data[:,(i*3)+1] - y_indey
 
-    # #do min-max scaling but using the screen
-    # for i in range(25):
-    #     total = np.sqrt( np.square(data[:,i*3]) + np.square(data[:,(i*3)+1]))
-    #     data[:,i*3] = data[:,i*3]/total
-    #     data[:, (i*3)+1] = data[:,(i*3)+1]/total
+    #do min-max scaling but using the screen
+    for i in range(25):
+        total = np.sqrt( np.square(data[:,i*3]) + np.square(data[:,(i*3)+1]))
+        data[:,i*3] = data[:,i*3]/total
+        data[:, (i*3)+1] = data[:,(i*3)+1]/total
 
     #remove confidence intervals
     data = np.nan_to_num(data)

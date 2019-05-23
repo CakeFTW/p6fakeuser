@@ -1,18 +1,20 @@
 #Importing stuff
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 import sklearn.svm as clf 
 from sklearn.svm import SVC, LinearSVC, NuSVC
+from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score
 from sklearn.multiclass import OneVsOneClassifier
 from sklearn.multiclass import OneVsRestClassifier
+from sklearn.utils.multiclass import unique_labels
 from sklearn import tree
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score, confusion_matrix, roc_auc_score, classification_report
 from sklearn.decomposition import PCA
 from sklearn.feature_selection import VarianceThreshold
 from time import time
@@ -21,8 +23,8 @@ from sklearn.externals import joblib
 import dataprocess as dp 
 
 #Read the data and labels csv files and save them to a DataFrame
-df_data = pd.read_csv("calibration_data.csv")
-df_labels = pd.read_csv("calibration_labels.csv")
+df_data = pd.read_csv("ep_data.csv")
+df_labels = pd.read_csv("ep_labels.csv")
 #print(df_data.head())
 
 #1-Hot-Encode the labels
@@ -32,8 +34,6 @@ df_labels = pd.get_dummies(df_labels) #1-hot-encode the categories
 print("OG shape:", df_data.shape)
 
 df_data = dp.circle_scale(df_data.values)
-
-#df_data = dp.circle_scale(df_data.values)
 
 #Create VarianceThreshold object with a variance with a threshold of 0.5
 #thresholder = VarianceThreshold(threshold=.5)
@@ -46,7 +46,7 @@ df_data = dp.circle_scale(df_data.values)
 #Dimensionality reduction, keeping 95% of the variance
 #pca = PCA(.95)
 #df_data_projected = pca.fit_transform(df_data)
-#print("Number of dimensions:",pca.n_components_)
+#print("Number of dimensions:",pca.n_components_){}
 #print("Projected shape:", df_data_projected.shape)
 
 #Split the date and labels
@@ -61,14 +61,21 @@ start = time()
 clf.fit(X_train, y_train)
 print('yeet with a time of:', time() - start, 'seconds')
 
-#Esting the model
+#Testing the model
 y_pred = clf.predict(X_test)
+#y_pred_prob = clf.predict_proba(X_test)
+#print(y_pred_prob)
 
 #Evaluation
+labels = ['nothing','forward','up','back','left','down','right']
 print("Accuracy Score:", accuracy_score(y_test, y_pred))
+print("AUC Score:", roc_auc_score(y_test, y_pred))
+print(classification_report(y_test,y_pred, target_names=labels))
+cm = confusion_matrix(y_test.values.argmax(axis=1), y_pred.argmax(axis=1))
+print(cm)
 
-#Saveing the model
-pkl_filename = "SVMLinear.pkl"  
+# #Saveing the model
+pkl_filename = "svm.pkl"  
 with open(pkl_filename, 'wb') as file:  
     pickle.dump(clf, file)
 print('Model saved')

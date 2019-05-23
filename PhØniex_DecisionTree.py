@@ -1,28 +1,30 @@
 #Importing stuff
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 import sklearn.svm as clf 
 from sklearn.svm import SVC, LinearSVC, NuSVC
+from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score
 from sklearn.multiclass import OneVsOneClassifier
 from sklearn.multiclass import OneVsRestClassifier
+from sklearn.utils.multiclass import unique_labels
 from sklearn import tree
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score, confusion_matrix, roc_auc_score, classification_report
 from sklearn.decomposition import PCA
 from sklearn.feature_selection import VarianceThreshold
 from time import time
 import pickle
 from sklearn.externals import joblib
-import dataprocess as dp 
+import dataprocess as dp  
 
 #Read the data and labels csv files and save them to a DataFrame
-df_data = pd.read_csv("calibration_data.csv")
-df_labels = pd.read_csv("calibration_labels.csv")
+df_data = pd.read_csv("ep_noflip_data.csv")
+df_labels = pd.read_csv("ep_noflip_labels.csv")
 #print(df_data.head())
 
 #1-Hot-Encode the labels
@@ -48,7 +50,7 @@ df_data = dp.circle_scale(df_data.values)
 #print("Projected shape:", df_data_projected.shape)
 
 #Split the date and labels
-X_train, X_test, y_train, y_test = train_test_split(df_data, df_labels, test_size=0.2, random_state=1377)
+X_train, X_test, y_train, y_test = train_test_split(df_data, df_labels, test_size=0.2, random_state=42)
 print('ya')
 
 #Selecting paramaters
@@ -56,21 +58,28 @@ print('ya')
 
 #Make the models
 #clf = GridSearchCV(tree.DecisionTreeClassifier(random_state=420), param)
-clf = tree.DecisionTreeClassifier(random_state=52)
+clf = tree.DecisionTreeClassifier(random_state=42)
 
 #Train the model
 start = time()
 clf.fit(X_train, y_train)
 print('yeet with a time of:', time() - start, 'seconds')
 
-#Esting the model
+#Testing the model
 y_pred = clf.predict(X_test)
+# y_pred_prob = clf.predict_proba(X_test)
+# print(y_pred_prob)
 
 #Evaluation
+labels = ['nothing','forward','up','back','left','down','right']
 print("Accuracy Score:", accuracy_score(y_test, y_pred))
+print("AUC Score:", roc_auc_score(y_test, y_pred))
+print(classification_report(y_test,y_pred, target_names=labels))
+cm = confusion_matrix(y_test.values.argmax(axis=1), y_pred.argmax(axis=1))
+print(cm)
 
 #Saveing the model
-pkl_filename = "DecisionTree.pkl"  
-with open(pkl_filename, 'wb') as file:  
+pkl_filename = "dt.pkl"  
+with open(pkl_filename, 'wb') as file:
     pickle.dump(clf, file)
 print('Model saved')
